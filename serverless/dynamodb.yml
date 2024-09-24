@@ -1,0 +1,83 @@
+tableArn:
+  us-west-2:
+    Fn::GetAtt: [ EntitiesTable, Arn ]
+  us-east-1: ${awsdesc:DynamoDB.describeTable.TableName.${self:provider.environment.ENTITY_TABLE_NAME}.Table.TableArn}
+    # Fn::GetAtt: [ EntitiesTable, Arn ]
+
+tableStreamArn:
+  us-west-2:
+    Fn::GetAtt: [ EntitiesTable, StreamArn ]
+  us-east-1: ${awsdesc:DynamoDB.describeTable.TableName.${self:provider.environment.ENTITY_TABLE_NAME}.Table.LatestStreamArn}
+    # Fn::GetAtt: [ EntitiesTable, StreamArn ]
+        
+filterPatterns:
+  - eventName: [ INSERT, MODIFY ]
+    dynamodb:
+      NewImage:
+        awsregion:
+          S:
+            - 'us-west-2'
+  - eventName: [ REMOVE ]
+    dynamodb:
+      OldImage:
+        awsregion:
+          S:
+            - 'us-west-2'
+
+resources:
+  Resources:
+    EntitiesTable:
+      Type: AWS::DynamoDB::Table
+    # Condition: IsWest # west will own global tables based on order of deployment
+      # DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.ENTITY_TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+          - AttributeName: discriminator
+            AttributeType: S
+          # - AttributeName: data
+          #   AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        ProvisionedThroughput: #only needed for local table
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+          - IndexName: gsi1
+            KeySchema:
+              - AttributeName: discriminator
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput: #only needed for local table
+                ReadCapacityUnits: 1
+                WriteCapacityUnits: 1
+        #   - IndexName: gsi2
+        #     KeySchema:
+        #       - AttributeName: discriminator
+        #         KeyType: HASH
+        #       - AttributeName: data
+        #         KeyType: RANGE
+        #     Projection:
+        #       ProjectionType: ALL
+        # Replicas:
+        #   - Region: 'us-west-2' # when not replicating
+        #   - Region: us-west-2
+        #     # PointInTimeRecoverySpecification:
+        #     #   PointInTimeRecoveryEnabled: true
+        #   - Region: us-east-1
+        # BillingMode: PAY_PER_REQUEST
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+        SSESpecification:
+          SSEEnabled: true

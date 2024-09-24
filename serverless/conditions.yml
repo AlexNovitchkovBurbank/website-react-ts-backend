@@ -1,0 +1,9 @@
+Conditions:
+  IsWest:
+    Fn::Equals:
+      - 'us-west-2'
+      - us-west-2
+  IsEast:
+    Fn::Equals:
+      - 'us-west-2'
+      - us-east-1

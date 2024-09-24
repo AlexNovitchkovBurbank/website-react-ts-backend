@@ -1,0 +1,38 @@
+params:
+  np:
+    debug: '*'
+    account: Alex
+    logRetentionInDays: 3
+  prd:
+    debug: ''
+    account: prod
+    logRetentionInDays: 30
+ 
+custom:
+  partition: aws
+  org: my
+  subsys: performance-service
+  webpack:
+    includeModules: true
+  tableArn: ${file(serverless/dynamodb.yml):tableArn.us-west-2}
+  tableStreamArn: ${file(serverless/dynamodb.yml):tableStreamArn.us-west-2}
+  # replication: ${file(serverless/s3.yml):replication}
+  # secrets: ${file(serverless/secrets.yml):secrets}
+  # cfn: ${file(serverless/cfn.yml):cfn}
+
+environment:
+  ACCOUNT_NAME: ${param:account}
+  PROJECT: ${self:service}
+  STAGE: 'dev'
+  DEBUG: ${param:debug}
+  AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+  ENTITY_TABLE_NAME: ${self:service}-dev-entities
+  # ENTITY_DATA_INDEX: gsi1
+  # USER_POOL: ${cf(us-west-2):${self:custom.subsys}-cognito-resources-dev.userPoolArn}
+  TOPIC_NAME: ${self:service}-dev
+  # BUS_NAME: ${cf:${self:custom.subsys}-event-hub-dev.busName}
+  # BUS_ARN: ${cf:${self:custom.subsys}-event-hub-dev.busArn}
+  # STREAM_ARN: ${cf:${self:custom.subsys}-event-hub-dev.stream1Arn}
+  # MASTER_KEY_ALIAS: ${cf:${self:custom.subsys}-global-resources-dev.MasterKeyAlias}
+  # MASTER_KEY_ARN: ${cf:${self:custom.subsys}-global-resources-dev.MasterKeyArn}
+  # KMS_REGIONS: us-east-1,us-west-2
