@@ -1,3 +1,27 @@
+/*
+MIT License
+
+Copyright (c) 2020 John Gilbert
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 import { updateExpression, timestampCondition } from '@alexnovitchkovburbank/custom-jgilbert-package';
 import invert from 'lodash/invert';
 
@@ -165,16 +189,35 @@ export const toUpdateRequest = (uow) => ({
   ...timestampCondition(),
 });
 
-export const toEvent = async (uow) => {
+export const toMessage = /* async */(uow) => {
   const data = uow.event.raw.new || /* istanbul ignore next */ uow.event.raw.old;
-  const records = uow.queryResponse.map((r) => (r.discriminator === DISCRIMINATOR ? data : r));
-  const metric = await AGGREGATE_MAPPER(records);
+  //const records = uow.queryResponse.map((r) => (r.discriminator === DISCRIMINATOR ? data : r));
+  //const metric = await AGGREGATE_MAPPER(records);
   return {
-    type: uow.event.type === 'metric-deleted'
-      ? /* istanbul ignore next */ uow.event.type
-      : STATUS_EVENT_MAP[data.status] || /* istanbul ignore next */ uow.event.type,
+    type: uow.event.type,
+    // type: uow.event.type === 'metric-deleted'
+    //   ? /* istanbul ignore next */ uow.event.type
+    //   : STATUS_EVENT_MAP[data.status] || /* istanbul ignore next */ uow.evebt.type,
     timestamp: data.timestamp || uow.event.timestamp,
-    metric,
+    data,
+    //metric,
     raw: undefined,
   };
 };
+
+
+// export const toMessage = /* async */(uow) => {
+//   const data = uow.event.raw.new || /* istanbul ignore next */ uow.event.raw.old;
+//   //const records = uow.queryResponse.map((r) => (r.discriminator === DISCRIMINATOR ? data : r));
+//   //const metric = await AGGREGATE_MAPPER(records);
+//   return {
+//     type: uow.event.type,
+//     // type: uow.event.type === 'metric-deleted'
+//     //   ? /* istanbul ignore next */ uow.event.type
+//     //   : STATUS_EVENT_MAP[data.status] || /* istanbul ignore next */ uow.event.type,
+//     timestamp: data.timestamp || uow.event.timestamp,
+//     data,
+//     //metric,
+//     raw: undefined,
+//   };
+// };

@@ -30,6 +30,7 @@ environment:
   # ENTITY_DATA_INDEX: gsi1
   # USER_POOL: ${cf(us-west-2):${self:custom.subsys}-cognito-resources-dev.userPoolArn}
   TOPIC_NAME: ${self:service}-dev
+  TOPIC_ARN: !Ref Topic
   # BUS_NAME: ${cf:${self:custom.subsys}-event-hub-dev.busName}
   # BUS_ARN: ${cf:${self:custom.subsys}-event-hub-dev.busArn}
   # STREAM_ARN: ${cf:${self:custom.subsys}-event-hub-dev.stream1Arn}
