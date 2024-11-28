@@ -58,3 +58,10 @@ resources:
     TriggerQueue:
       Value:
         Ref: TriggerQueue
+      Export:
+        Name: TriggerQueue
+    TriggerQueueArn:
+      Value:
+        Fn::GetAtt: [ TriggerQueue, Arn ]
+      Export:
+        Name: TriggerQueueArn
