@@ -28,3 +28,5 @@ resources:
     Topic:
       Value:
         Ref: Topic
+      Export:
+        Name: performance-service-topic-name

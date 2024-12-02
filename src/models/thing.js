@@ -172,18 +172,18 @@ const OUTCOME_STATUS_MAP = {
 
 export const toUpdateRequest = (uow) => ({
   Key: {
-    pk: uow.event.metric.id,
+    pk: uow.event.id,
     sk: DISCRIMINATOR,
   },
   ...updateExpression({
-    ...uow.event.metric,
-    status: EVENT_STATUS_MAP[uow.event.type] || uow.event.metric.status,
+    ...uow.event,
+    status: EVENT_STATUS_MAP[uow.event.type] /*|| uow.event.status*/,
     discriminator: DISCRIMINATOR,
-    lastModifiedBy: uow.event.metric.lastModifiedBy || 'system',
+    lastModifiedBy: uow.event.lastModifiedBy || 'system',
     timestamp: uow.event.timestamp,
     deleted: uow.event.type === 'metric-deleted' ? true : null,
     latched: true,
-    ttl: ttl(uow.event.timestamp, 33),
+    ttl: ttl(uow.event.sendTimestamp, 33),
     awsregion: process.env.AWS_REGION,
   }),
   ...timestampCondition(),

@@ -53,22 +53,13 @@ functions:
           method: any
           cors: ${file(serverless/apig.yml):cors}
           # authorizer: ${file(serverless/apig.yml):authorizer}
-  listener:
-    handler: src/listener/index.handle
-    events:
-      - sqs:
-          arn:
-            Fn::GetAtt: [ TriggerQueue, Arn ]
-        functionResponseType: ReportBatchItemFailures
-    # - stream:
-    #     type: kinesis
-    #     arn: ${self:provider.environment.STREAM_ARN}
-    #     batchSize: 100
-    #     startingPosition: TRIM_HORIZON
-    #     filterPatterns:
-    #       - data:
-    #           type:
-    #              - prefix: 'thing-'
+  # listener:
+  #   handler: src/listener/index.handle
+  #   events:
+  #     - sqs:
+  #         arn:
+  #           Fn::GetAtt: [ TriggerQueue, Arn ]
+  #       functionResponseType: ReportBatchItemFailures
   trigger:
     handler: src/trigger/index.handle
     events:
