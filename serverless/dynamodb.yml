@@ -37,8 +37,6 @@ resources:
             AttributeType: S
           - AttributeName: sk
             AttributeType: S
-          - AttributeName: discriminator
-            AttributeType: S
           # - AttributeName: data
           #   AttributeType: S
         KeySchema:
@@ -49,16 +47,6 @@ resources:
         ProvisionedThroughput: #only needed for local table
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
-        GlobalSecondaryIndexes:
-          - IndexName: gsi1
-            KeySchema:
-              - AttributeName: discriminator
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput: #only needed for local table
-                ReadCapacityUnits: 1
-                WriteCapacityUnits: 1
         #   - IndexName: gsi2
         #     KeySchema:
         #       - AttributeName: discriminator

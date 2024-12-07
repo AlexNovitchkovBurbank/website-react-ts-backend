@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 import {
-  cdc, upd as update, job, sendMessages
+  cdc, upd as update, job, sendMessages, publishToSns
 } from '@alexnovitchkovburbank/custom-jgilbert-package';
 
 import { toMessage as toMetricMessage } from '../models/thing';

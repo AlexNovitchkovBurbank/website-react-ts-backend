@@ -87,7 +87,7 @@
     "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
-    "@alexnovitchkovburbank/custom-jgilbert-package": "0.49.42",
+    "@alexnovitchkovburbank/custom-jgilbert-package": "0.49.43",
     "@babel/runtime": "^7.17.9",
     "aws-kms-ee": "^0.14.0",
     "bluebird": "^3.7.2",

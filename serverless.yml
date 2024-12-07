@@ -14,11 +14,13 @@ provider:
       - dynamodb:PutItem
     Resource:
       - ${self:custom.tableArn}
-      - Fn::Join:
-          - '/'
-          - - ${self:custom.tableArn}
-            - index
-            - gsi1
+  - Effect: Allow
+    Action:
+       - sqs:ReceiveMessage
+       - sqs:DeleteMessage
+       - sqs:GetQueueAttributes
+    Resource:
+      - Fn::GetAtt: [ TriggerQueue, Arn ]
   - Effect: Allow
     Action:
       - sns:Publish
@@ -53,13 +55,15 @@ functions:
           method: any
           cors: ${file(serverless/apig.yml):cors}
           # authorizer: ${file(serverless/apig.yml):authorizer}
-  # listener:
-  #   handler: src/listener/index.handle
-  #   events:
-  #     - sqs:
-  #         arn:
-  #           Fn::GetAtt: [ TriggerQueue, Arn ]
-  #       functionResponseType: ReportBatchItemFailures
+  listener:
+    handler: src/listener/index.handle
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt: 
+              - TriggerQueue
+              - Arn
+        functionResponseType: ReportBatchItemFailures
   trigger:
     handler: src/trigger/index.handle
     events:

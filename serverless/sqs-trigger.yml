@@ -4,7 +4,6 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:service}-dev-trigger
-        MessageRetentionPeriod: 120
         # KmsMasterKeyId: alias/aws/sqs
         # https://stackoverflow.com/questions/63808647/aws-forward-event-bridge-event-to-encrypted-sqs-amazon-managed-key
     TriggerQueuePolicy:
