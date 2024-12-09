@@ -24,26 +24,26 @@ resources:
                   aws:SourceArn:
                     Ref: Topic
 
-    TriggerToTriggerQueue:
-      Type: AWS::IAM::Role
-      Properties:
-        AssumeRolePolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service: lambda.amazonaws.com
-              Action: sts:AssumeRole
-        Policies:
-          - PolicyName: TriggerToTriggerQueuePolicy
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - sqs:SendMessage
-                  Resource:
-                    Fn::GetAtt: [TriggerQueue, Arn]
+    # TriggerToTriggerQueue:
+    #   Type: AWS::IAM::Role
+    #   Properties:
+    #     AssumeRolePolicyDocument:
+    #       Version: '2012-10-17'
+    #       Statement:
+    #         - Effect: Allow
+    #           Principal:
+    #             Service: lambda.amazonaws.com
+    #           Action: sts:AssumeRole
+    #     Policies:
+    #       - PolicyName: TriggerToTriggerQueuePolicy
+    #         PolicyDocument:
+    #           Version: '2012-10-17'
+    #           Statement:
+    #             - Effect: Allow
+    #               Action:
+    #                 - sqs:SendMessage
+    #               Resource:
+    #                 Fn::GetAtt: [TriggerQueue, Arn]
 
     TriggerSubscription:
       Type: AWS::SNS::Subscription
