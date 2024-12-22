@@ -190,7 +190,6 @@ export const toUpdateRequest = (uow) => ({
 });
 
 export const toMessage = /* async */(uow) => {
-  console.info("In toMessage: UOW: %j", uow);
   const data = uow.event.raw.new || /* istanbul ignore next */ uow.event.raw.old;
   //const records = uow.queryResponse.map((r) => (r.discriminator === DISCRIMINATOR ? data : r));
   //const metric = await AGGREGATE_MAPPER(records);

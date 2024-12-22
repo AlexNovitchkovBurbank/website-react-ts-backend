@@ -16,7 +16,7 @@ provider:
       - ${self:custom.tableArn}
   - Effect: Allow
     Action:
-       - sqs:ReceiveMessage
+       - sqs:SendMessage
        - sqs:DeleteMessage
        - sqs:GetQueueAttributes
     Resource:
@@ -24,7 +24,8 @@ provider:
   - Effect: Allow
     Action:
       - sns:Publish
-    Resource: "*"
+    Resource:
+      - arn:aws:sns:us-west-2:167345660221:performance-service-bff-service-dev
 
   stackTags: ${file(serverless/tags.yml)}
   runtime: nodejs16.x
@@ -60,10 +61,8 @@ functions:
     events:
       - sqs:
           arn:
-            Fn::GetAtt: 
-              - TriggerQueue
-              - Arn
-        functionResponseType: ReportBatchItemFailures
+            Fn::GetAtt: [TriggerQueue, Arn]
+        functionResponseType: ReportBatchItemFailures # reports messages in batches that failed to sqs
   trigger:
     handler: src/trigger/index.handle
     events:
